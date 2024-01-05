@@ -1,0 +1,9 @@
+venv
+venv3.8
+data
+/data/glue/MEDQA/cache_93078/
+results
+results_try
+roberta-base
+runs
+sample
