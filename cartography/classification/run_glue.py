@@ -469,7 +469,7 @@ def evaluate(args, model, tokenizer, prefix="", eval_split="dev"):
         output_pred_file = os.path.join(
             eval_output_dir, f"predictions_{eval_task}_{eval_split}_{prefix}.lst")
         with open(output_pred_file, "w") as writer:
-            logger.info(f"***** Write {eval_task} {eval_split} predictions {prefix} *****")
+            logger.info(f"***** Write {eval_task} {eval_split} predictions {prefix} to {output_pred_file} *****")
             for ex_id, pred, gold, max_conf, prob in zip(
                 example_ids, preds, gold_labels, max_confidences, probs.tolist()):
                 record = {"guid": ex_id,
@@ -771,21 +771,23 @@ def main():
     parser.add_argument("--output_dir",
                         "-o",
                         type=os.path.abspath,
-                        default="/home/lw754/L101/results/medqa_bert_test",
+                        default="/home/lw754/L101/results/medqa2",
                         help="Output directory for model.")
     parser.add_argument("--do_train",
                         action="store_true",
-                        default=True,
+                        default=False,
                         help="Whether to run training.")
     parser.add_argument("--do_eval",
                         action="store_true",
-                        default=True,
+                        default=False,
                         help="Whether to run eval on the dev set.")
     parser.add_argument("--do_test",
                         action="store_true",
+                        default=True,
                         help="Whether to run eval on the (OOD) test set.")
     parser.add_argument("--test",
                         type=os.path.abspath,
+                        default="/home/lw754/L101/data/GPUK/gp-uk.json",
                         help="OOD test set.")
 
     # TODO(SS): Automatically map tasks to OOD test sets.

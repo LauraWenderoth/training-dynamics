@@ -9,12 +9,12 @@ local TASK = "MEDQA";
 local DATA_DIR = "/home/lw754/L101/data/glue/" + TASK;
 local FEATURES_CACHE_DIR = DATA_DIR + "/cache_" + SEED ;
 
-local TEST = "/home/lw754/L101/data/glue/MEDQA/test.json";
+local TEST = "/home/lw754/L101/data/glue/GPUK/gp-uk.json";
 
 {
    "data_dir": DATA_DIR,
-   "model_type": "bert",
-   "model_name_or_path": "bert-large-uncased",
+   "model_type": "roberta",
+   "model_name_or_path": "roberta-large",
    "task_name": TASK,
    "seed": SEED,
    "num_train_epochs": NUM_EPOCHS,

@@ -19,16 +19,12 @@ logger = logging.getLogger(__name__)
 
 from cartography.data_utils_glue import convert_string_to_unique_number
 from cartography.classification.mnli_utils import AdaptedMnliMismatchedProcessor, AdaptedMnliProcessor
-from cartography.classification.qnli_utils import AdaptedQnliProcessor
-from cartography.classification.snli_utils import SNLIProcessor
-from cartography.classification.winogrande_utils import WinograndeProcessor
 from cartography.classification.medqa_utils import MEDQAProcessor
 
-glue_processors["snli"] = SNLIProcessor
+
 glue_processors["mnli"] = AdaptedMnliProcessor
 glue_processors["mnli-mm"] = AdaptedMnliMismatchedProcessor
-glue_processors["qnli"] = AdaptedQnliProcessor
-glue_processors["winogrande"] = WinograndeProcessor
+
 glue_processors["medqa"] = MEDQAProcessor
 
 glue_output_modes["snli"] = "classification"
