@@ -1,8 +1,8 @@
 local CUDA_DEVICE = std.parseInt(std.extVar("CUDA_VISIBLE_DEVICES"));
 
 local LEARNING_RATE = 1.0708609960508476e-05;
-local BATCH_SIZE = 4;
-local NUM_EPOCHS = 23;
+local BATCH_SIZE = 16;
+local NUM_EPOCHS = 20;
 local SEED = 93078;
 
 local TASK = "MEDQA";
@@ -13,8 +13,8 @@ local TEST = "/home/lw754/L101/data/glue/MEDQA/test.json";
 
 {
    "data_dir": DATA_DIR,
-   "model_type": "roberta",
-   "model_name_or_path": "roberta-large",
+   "model_type": "bert",
+   "model_name_or_path": "bert-large-uncased",
    "task_name": TASK,
    "seed": SEED,
    "num_train_epochs": NUM_EPOCHS,
@@ -25,5 +25,5 @@ local TEST = "/home/lw754/L101/data/glue/MEDQA/test.json";
    "do_eval": true,
    "do_test": true,
    "test": TEST,
-   "patience": 3
+   "patience": 20
 }

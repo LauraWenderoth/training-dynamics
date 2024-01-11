@@ -771,7 +771,7 @@ def main():
     parser.add_argument("--output_dir",
                         "-o",
                         type=os.path.abspath,
-                        default="/home/lw754/L101/results/medqa",
+                        default="/home/lw754/L101/results/medqa_bert_test",
                         help="Output directory for model.")
     parser.add_argument("--do_train",
                         action="store_true",

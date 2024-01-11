@@ -17,6 +17,7 @@ import pandas as pd
 import seaborn as sns
 import torch
 import tqdm
+from matplotlib.font_manager import FontProperties
 
 from collections import defaultdict
 from typing import List
@@ -192,7 +193,7 @@ def write_filtered_data(args, train_dy_metrics):
   sorted_scores = train_dy_metrics.sort_values(by=[args.metric],
                                                ascending=is_ascending)
 
-  original_train_file = os.path.join(os.path.join(args.data_dir, args.task_name), f"train.tsv")
+  original_train_file = os.path.join(os.path.join(args.data_dir, args.task_name), f"train.json")
   train_numeric, header = read_data(original_train_file, task_name=args.task_name, guid_as_int=True)
 
   for fraction in [0.01, 0.05, 0.10, 0.1667, 0.25, 0.3319, 0.50, 0.75]:
@@ -207,7 +208,7 @@ def write_filtered_data(args, train_dy_metrics):
                   to_dir=outdir)
 
     num_samples = int(fraction * len(train_numeric))
-    with open(os.path.join(outdir, f"train.tsv"), "w") as outfile:
+    with open(os.path.join(outdir, f"train.json"), "w") as outfile:
       outfile.write(header + "\n")
       selected = sorted_scores.head(n=num_samples+1)
       if args.both_ends:
@@ -225,7 +226,7 @@ def write_filtered_data(args, train_dy_metrics):
           f"{args.metric} = {selected.iloc[idx][args.metric]:.4f}")
 
         selected_id = selected.iloc[idx]["guid"]
-        if args.task_name in ["SNLI", "MNLI", "MEDAQ"]:
+        if args.task_name in ["SNLI", "MNLI", "MEDQA"]:
           selected_id = int(selected_id)
         elif args.task_name == "WINOGRANDE":
           selected_id = str(int(selected_id))
@@ -243,7 +244,14 @@ def plot_data_map(dataframe: pd.DataFrame,
                   show_hist: bool = False,
                   max_instances_to_plot = 55000):
     # Set style.
-    sns.set(style='whitegrid', font_scale=1.6, font='Georgia', context='paper')
+    font_path = '/home/lw754/L101/georgia.ttf'
+
+    # Set font properties
+    font_properties = FontProperties(fname=font_path)
+
+    # Set Seaborn style with custom font
+    sns.set(style='whitegrid', font_scale=1.6, rc={'font.family': font_properties.get_family()})
+
     logger.info(f"Plotting figure for {title} using the {model} model ...")
 
     # Subsample data to plot, so the plot is not too busy.
@@ -252,6 +260,8 @@ def plot_data_map(dataframe: pd.DataFrame,
     # Normalize correctness to a value between 0 and 1.
     dataframe = dataframe.assign(corr_frac = lambda d: d.correctness / d.correctness.max())
     dataframe['correct.'] = [f"{x:.1f}" for x in dataframe['corr_frac']]
+    dataframe['correct.'] = dataframe['correct.'].astype(float)  # Convert to float for proper sorting
+    dataframe = dataframe.sort_values('correct.')
 
     main_metric = 'variability'
     other_metric = 'confidence'
@@ -315,14 +325,19 @@ def plot_data_map(dataframe: pd.DataFrame,
         plott0[0].set_title('')
         plott0[0].set_xlabel('confidence')
         plott0[0].set_ylabel('density')
+        ax1.tick_params(axis='x', labelrotation=45, labelsize=10)
 
         plott1 = dataframe.hist(column=['variability'], ax=ax2, color='teal')
         plott1[0].set_title('')
         plott1[0].set_xlabel('variability')
         plott1[0].set_ylabel('density')
+        ax2.tick_params(axis='x', labelrotation=45,
+                        labelsize=10)  # Adjust rotation and fontsize for variability subplot
 
         plot2 = sns.countplot(x="correct.", data=dataframe, ax=ax3, color='#86bf91')
         ax3.xaxis.grid(True) # Show the vertical gridlines
+        plot2.set_xticklabels(plot2.get_xticklabels(), rotation=45, ha='right', fontsize=10)  # Adjust the fontsize as needed
+
 
         plot2.set_title('')
         plot2.set_xlabel('correctness')
@@ -338,18 +353,21 @@ if __name__ == "__main__":
   parser = argparse.ArgumentParser()
   parser.add_argument("--filter",
                       action="store_true",
+                      default=True,
                       help="Whether to filter data subsets based on specified `metric`.")
   parser.add_argument("--plot",
                       action="store_true",
+                      default =True,
                       help="Whether to plot data maps and save as `pdf`.")
   parser.add_argument("--model_dir",
                       "-o",
-                      required=True,
+
+                      default="/home/lw754/L101/results/medqa_bert",
                       type=os.path.abspath,
                       help="Directory where model training dynamics stats reside.")
   parser.add_argument("--data_dir",
                       "-d",
-                      default="/Users/swabhas/data/glue/WINOGRANDE/xl/",
+                      default="/home/lw754/L101/data/glue",
                       type=os.path.abspath,
                       help="Directory where data for task resides.")
   parser.add_argument("--plots_dir",
@@ -367,13 +385,14 @@ if __name__ == "__main__":
                                'variability',
                                'correctness',
                                'forgetfulness'),
+                      default="variability",
                       help="Metric to filter data by.",)
   parser.add_argument("--include_ci",
                       action="store_true",
                       help="Compute the confidence interval for variability.")
   parser.add_argument("--filtering_output_dir",
                       "-f",
-                      default="./filtered/",
+                      default="/home/lw754/L101/results/filtered/",
                       type=os.path.abspath,
                       help="Output directory where filtered datasets are to be written.")
   parser.add_argument("--worst",
@@ -385,10 +404,10 @@ if __name__ == "__main__":
                       help="Select from both ends of the spectrum acc. to metric,")
   parser.add_argument("--burn_out",
                       type=int,
-                      default=100,
+                      default=5,
                       help="# Epochs for which to compute train dynamics.")
   parser.add_argument("--model",
-                      default="RoBERTa",
+                      default="BERT",
                       help="Model for which data map is being plotted")
 
   args = parser.parse_args()
@@ -400,7 +419,9 @@ if __name__ == "__main__":
   if args.burn_out > total_epochs:
     args.burn_out = total_epochs
     logger.info(f"Total epochs found: {args.burn_out}")
-  train_dy_metrics, _ = compute_train_dy_metrics(training_dynamics, args)
+  train_dy_metrics, df = compute_train_dy_metrics(training_dynamics, args)
+  filename = f'{args.plots_dir}/{args.task_name}_{args.model}_training_overview.json'
+  df.to_json(filename)
 
   burn_out_str = f"_{args.burn_out}" if args.burn_out > total_epochs else ""
   train_dy_filename = os.path.join(args.model_dir, f"td_metrics{burn_out_str}.jsonl")
@@ -421,3 +442,4 @@ if __name__ == "__main__":
     if not os.path.exists(args.plots_dir):
       os.makedirs(args.plots_dir)
     plot_data_map(train_dy_metrics, args.plots_dir, title=args.task_name, show_hist=True, model=args.model)
+

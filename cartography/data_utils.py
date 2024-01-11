@@ -9,7 +9,7 @@ import shutil
 
 from typing import Dict
 
-from cartography.data_utils_glue import read_glue_tsv
+from cartography.data_utils_glue import read_glue_tsv, read_glue_json
 
 logger = logging.getLogger(__name__)
 
@@ -20,8 +20,7 @@ def read_data(file_path: str,
   """
   Reads task-specific datasets from corresponding GLUE-style TSV files.
   """
-  logger.warning("Data reading only works when data is in TSV format, "
-                 " and last column as classification label.")
+
 
   # `guid_index`: should be 2 for SNLI, 0 for MNLI and None for any random tsv file.
   if task_name == "MNLI":
@@ -36,7 +35,7 @@ def read_data(file_path: str,
     return read_glue_tsv(file_path,
                         guid_index=0)
   elif task_name == "MEDQA":
-    return read_glue_tsv(file_path,
+    return read_glue_json(file_path,
                         guid_index=0)
   elif task_name == "QNLI":
     return read_glue_tsv(file_path,
@@ -65,7 +64,7 @@ def convert_tsv_entries_to_dataframe(tsv_dict: Dict, header: str) -> pd.DataFram
 def copy_dev_test(task_name: str,
                   from_dir: os.path,
                   to_dir: os.path,
-                  extension: str = ".tsv"):
+                  extension: str = ".json"):
   """
   Copies development and test sets (for data selection experiments) from `from_dir` to `to_dir`.
   """

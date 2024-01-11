@@ -35,8 +35,8 @@ if __name__ == "__main__":
                       help="Path where randomly subsampled data is to be written.",)
   parser.add_argument("--task_name",
                       "-t",
-                      default="SNLI",
-                      choices=("SNLI", "MNLI", "WINOGRANDE", "QNLI"),
+                      default="MEDQA",
+                      choices=("SNLI", "MNLI", "WINOGRANDE", "QNLI", "MEDQA"),
                       help="Name of GLUE-style task.",)
   parser.add_argument("--seed",
                       type=int,

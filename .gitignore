@@ -7,3 +7,9 @@ results_try
 roberta-base
 runs
 sample
+/__pycache__/
+cartography/__pycache__/
+cartography/classification/__pycache__/
+.idea/
+.uuid
+notebooks

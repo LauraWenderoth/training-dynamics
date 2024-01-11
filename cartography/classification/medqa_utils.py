@@ -53,7 +53,7 @@ class MEDQAProcessor(DataProcessor):
         examples = []
         for index, record in records.iterrows():
             question = record["question"]
-
+            guid = record['id']
             options = [record["opa"], record["opb"], record["opc"], record["opd"]]
             correct_option = record["cop"]
 
