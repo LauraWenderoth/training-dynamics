@@ -1,6 +1,13 @@
+# Diagnosing Medical Datasets with Training Dynamics
+
+Code is based on the code for this paper [Dataset Cartography: Mapping and Diagnosing Datasets with Training Dynamics](https://aclanthology.org/2020.emnlp-main.746) at EMNLP 2020.
+
+This repository contains implementation of data maps, as well as other data selection baselines for the MEDQA dataset.
+
+
 ## Results
 
-![Data Map MEDQA](results/MEDQA_RoBERTa.jpg "Data map analysis on the MEDQA dataset using the performance of the ROBERTA-Large classifier with 182,822 training samples. Only 25,000 samples are displayed for clarity. The x-axis indicates variability, ranging from low to high, while the y-axis represents the confidence levels of the classifier. The visualisation uses different colours and shapes to indicate correctness. Red triangles represent easy-to-learn examples with low variability and high confidence, blue circles represent hard-to-learn instances with low variability and low confidence, and black pluses represent ambiguous cases with high variability. This intuitive representation provides a comprehensive overview of the dataset with respect to the classifier.")
+![Data Map MEDQA](results/MEDQA_RoBERTa.jpg)
 Data map analysis on the MEDQA dataset using the performance of the ROBERTA-Large classifier with 182,822 training samples. Only 25,000 samples are displayed for clarity. The x-axis indicates variability, ranging from low to high, while the y-axis represents the confidence levels of the classifier. The visualisation uses different colours and shapes to indicate correctness. Red triangles represent easy-to-learn examples with low variability and high confidence, blue circles represent hard-to-learn instances with low variability and low confidence, and black pluses represent ambiguous cases with high variability. This intuitive representation provides a comprehensive overview of the dataset with respect to the classifier.
 
 | Training Scenario | MedQA Test (ID) | GP-UK (OOD) |
