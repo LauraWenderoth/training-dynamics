@@ -3,11 +3,11 @@
 ![Data Map MEDQA](results/MEDQA_RoBERTa.jpg "Data map analysis on the MEDQA dataset using the performance of the ROBERTA-Large classifier with 182,822 training samples. Only 25,000 samples are displayed for clarity. The x-axis indicates variability, ranging from low to high, while the y-axis represents the confidence levels of the classifier. The visualisation uses different colours and shapes to indicate correctness. Red triangles represent easy-to-learn examples with low variability and high confidence, blue circles represent hard-to-learn instances with low variability and low confidence, and black pluses represent ambiguous cases with high variability. This intuitive representation provides a comprehensive overview of the dataset with respect to the classifier.")
 Data map analysis on the MEDQA dataset using the performance of the ROBERTA-Large classifier with 182,822 training samples. Only 25,000 samples are displayed for clarity. The x-axis indicates variability, ranging from low to high, while the y-axis represents the confidence levels of the classifier. The visualisation uses different colours and shapes to indicate correctness. Red triangles represent easy-to-learn examples with low variability and high confidence, blue circles represent hard-to-learn instances with low variability and low confidence, and black pluses represent ambiguous cases with high variability. This intuitive representation provides a comprehensive overview of the dataset with respect to the classifier.
 
-| Training Scenario |  | MedQA Test (ID) | GP-UK (OOD) |
-| ------------------ |   --------------- | ----------- |
-| 100% train         |          **36.07**        | **30.50**    |
-| 33% (random)       |          33.38           | 20.34       |
-| 33% (ambiguous)    |          33.02           | 22.03       |
+| Training Scenario   MedQA Test (ID) | GP-UK (OOD) |
+| ------------------| --------------- | ----------- |
+| 100% train        |**36.07**        | **30.50**   |
+| 33% (random)      | 33.38           | 20.34       |
+| 33% (ambiguous)   | 33.02           | 22.03       |
 
 
 ## Create Env
