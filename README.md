@@ -1,6 +1,6 @@
 # Diagnosing Medical Datasets with Training Dynamics
 
-Code is based on the code for this paper [Dataset Cartography: Mapping and Diagnosing Datasets with Training Dynamics](https://aclanthology.org/2020.emnlp-main.746) at EMNLP 2020.
+Code is based and adapted on the code for this paper [Dataset Cartography: Mapping and Diagnosing Datasets with Training Dynamics](https://aclanthology.org/2020.emnlp-main.746) at EMNLP 2020.
 
 This repository contains implementation of data maps, as well as other data selection baselines for the MEDQA dataset.
 
